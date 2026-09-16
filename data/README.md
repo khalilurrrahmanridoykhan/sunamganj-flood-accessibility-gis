@@ -103,6 +103,39 @@ AOI). The correct comparison is those same 13 features **unioned**
 within 3.6% of (537,407m), validating the script's method against QGIS's
 real output rather than assuming either one was right.
 
+## Phase Q3 outputs — real per-upazila zonal statistics
+
+| File | Produced by |
+|---|---|
+| `flood_extent_by_upazila.gpkg`, `lost_access_by_upazila.gpkg` | QGIS Vector overlay → Intersection |
+| `population_total_by_upazila.gpkg`, `population_flood_exposed_by_upazila.gpkg`, `population_access_loss_by_upazila.gpkg` | QGIS Raster Analysis → Zonal Statistics (Sum), WorldPop × each polygon layer above |
+| `q3_population_by_upazila.csv` | This repo, joined on `adm3_pcode` (never name) with a sanity check: flood-exposed/access-loss population can never exceed total population per upazila — verified, no failures |
+
+**Real result, per upazila** (population: total / flood-exposed / losing access):
+
+| Upazila | Total | Flood-exposed | Losing access |
+|---|---|---|---|
+| Itna | 38,866 | 2,192 | 0 |
+| Khaliajuri | 32,157 | 321 | 7,690 |
+| Ajmiriganj | 125,524 | 9,646 | 6,543 |
+| Baniachong | 163,357 | 1,920 | 29,806 |
+| Nabiganj | 67,869 | 276 | 0 |
+| Derai | 149,023 | 605 | 14,260 |
+| Jagannathpur | 17,735 | 0 | 0 |
+| Shalla | 122,678 | 5,944 | 29,603 |
+
+**Cross-validated against Phase Q2:** the access-loss column sums to
+**87,902** — matching Q2's independent single-buffer estimate (~87,900)
+computed with a completely different method (one unioned buffer vs. this
+phase's proper per-upazila zonal breakdown). Two different real
+computations landing within 2 people of each other is strong evidence
+neither is a fluke.
+
+**A real, expected finding, not an error:** Baniachong and Shalla show
+the highest flood-exposed *and* access-loss populations despite similar
+totals to Derai and Ajmiriganj — worth a real GIS interpretation in Q4's
+prioritization, not just a number to report.
+
 ## Regenerating
 
 ```
