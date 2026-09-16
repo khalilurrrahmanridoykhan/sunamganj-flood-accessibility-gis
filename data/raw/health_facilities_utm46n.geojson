@@ -1,0 +1,20 @@
+{
+"type": "FeatureCollection",
+"name": "health_facilities_utm46n",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32646" } },
+"features": [
+{ "type": "Feature", "properties": { "osm_id": 2332892994, "osm_type": "node", "amenity": "hospital", "name": "Ajmiriganj Upazila Health Complex" }, "geometry": { "type": "Point", "coordinates": [ 321294.40871758130379, 2716439.828688791021705 ] } },
+{ "type": "Feature", "properties": { "osm_id": 2332892995, "osm_type": "node", "amenity": "hospital", "name": "বানিয়াচং ঊপজেলা স্বাস্থ্য কমপ্লেক্স" }, "geometry": { "type": "Point", "coordinates": [ 334237.84679288615007, 2711053.751539699733257 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6123345342, "osm_type": "node", "amenity": "clinic", "name": "Loularchar Commuinity Clinic" }, "geometry": { "type": "Point", "coordinates": [ 324032.590484369080514, 2737560.702676729764789 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6123345366, "osm_type": "node", "amenity": "clinic", "name": "Shamarchar commuinity Clinic" }, "geometry": { "type": "Point", "coordinates": [ 322556.742326733190566, 2738344.550184710882604 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6123345380, "osm_type": "node", "amenity": "clinic", "name": "Kartikpur Commuinity Clinic" }, "geometry": { "type": "Point", "coordinates": [ 323934.512499551405199, 2737934.601054097991437 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6124500126, "osm_type": "node", "amenity": "hospital", "name": "Vojendroganj up health and family welfare centre" }, "geometry": { "type": "Point", "coordinates": [ 321128.875295597244985, 2738148.681505286600441 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6124500135, "osm_type": "node", "amenity": "clinic", "name": "Uzanyarabad community clinic" }, "geometry": { "type": "Point", "coordinates": [ 314621.917161464574747, 2737111.171191678382456 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6124500144, "osm_type": "node", "amenity": "clinic", "name": "Kashipur Community Clinic" }, "geometry": { "type": "Point", "coordinates": [ 319134.694791624322534, 2735392.017708675935864 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6124500161, "osm_type": "node", "amenity": "clinic", "name": "Atgao community clinic" }, "geometry": { "type": "Point", "coordinates": [ 316620.090206639899407, 2738630.952547089196742 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6124500176, "osm_type": "node", "amenity": "hospital", "name": "Union health and family welfare center" }, "geometry": { "type": "Point", "coordinates": [ 313931.908396866929252, 2740234.551871715579182 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6125239779, "osm_type": "node", "amenity": "clinic", "name": "Srihile community clinic" }, "geometry": { "type": "Point", "coordinates": [ 318889.914193018805236, 2720589.934484307654202 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6125242925, "osm_type": "node", "amenity": "clinic", "name": "Adittopur community clinic" }, "geometry": { "type": "Point", "coordinates": [ 317589.86760257545393, 2725295.559934217017144 ] } },
+{ "type": "Feature", "properties": { "osm_id": 6281151376, "osm_type": "node", "amenity": "clinic", "name": "Achanpur community clinic" }, "geometry": { "type": "Point", "coordinates": [ 331236.879613228840753, 2734144.558368754573166 ] } }
+]
+}
