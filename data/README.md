@@ -33,6 +33,29 @@ Phase H5 used for Dirai, Sunamganj.
    the official `adm3_pcode` — but it's worth naming out loud as the same
    failure mode P-code joins exist to prevent.
 
+## `processed/` — Phase Q1 outputs (real QGIS GUI work, not scripted)
+
+| File | Produced by | Real numbers |
+|---|---|---|
+| `health_facility_buffers_2km.gpkg` | QGIS Processing → Buffer, 2000m, on `health_facilities_utm46n` | 13 buffer polygons |
+| `health_facilities_with_upazila.gpkg` | QGIS Processing → Join attributes by location (`within`), facilities × upazila boundaries | 13/13 facilities matched |
+| `flooded_roads.gpkg` | QGIS Processing → Extract by location (`intersect`), roads × the dissolved flood extent | 283 of 3,398 road segments (8.3%) — consistent with the 8.0% of the AOI that was flooded |
+
+**A real export bug, caught and fixed:** all three files came out of QGIS's
+"Save Features As" with no CRS attached at all (confirmed with `ogrinfo`,
+not just a display glitch). The coordinate values themselves were still
+correct UTM 46N meters (`total_bounds` matched the AOI exactly) — only the
+CRS label was missing on export — so the fix was assigning EPSG:32646
+back onto each file, not reprojecting anything.
+
+**Topology check on `roads_utm46n`** ("must not have dangles" rule, QGIS's
+Topology Checker plugin): **5,023 dangling endpoints** found, out of a
+theoretical max of 6,796 (3,398 segments × 2 ends). Expected for raw rural
+OSM data, not an error: real dead-end tracks/driveways, artifacts of the
+rectangular AOI cutting roads at its edge, and incomplete rural mapping
+connectivity. Not fixed wholesale — Q2's network analysis will need to
+account for this rather than assume a fully connected graph.
+
 ## Regenerating
 
 ```
