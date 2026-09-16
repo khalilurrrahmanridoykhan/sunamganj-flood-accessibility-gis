@@ -169,6 +169,40 @@ while Shalla's did not (99%). A response plan built on flood extent alone
 would misprioritize Ajmiriganj over Shalla; this is exactly the failure
 mode network-based accessibility analysis exists to catch.
 
+## Phase Q5 output — cartographic atlas
+
+`maps/sunamganj_flood_priority_atlas.pdf` — real QGIS Print Layout +
+Atlas work: `upazila_priority_ranking` set as the atlas coverage layer,
+one page auto-generated per upazila (8 pages total), each with:
+
+- The graduated priority-score choropleth (5 classes, Natural Breaks)
+- Flood extent (semi-transparent blue), full road network (gray) vs.
+  flood-degraded network (dark gray, thinner than the full network so
+  the priority-score colors stay the dominant signal), health facilities
+- A dynamic title driven by the atlas expression `[% "adm3_name" %]`,
+  legend, scale bar, north arrow
+- Map extent auto-zoomed to each upazila's bounding box + 15% margin —
+  for upazilas with an elongated/irregular shape (e.g. Derai), this
+  bounding box can span nearly the full AOI rather than tightly cropping
+  to just that upazila; a known characteristic of bbox-driven atlas
+  zoom, not a bug, and left as-is rather than manually overriding each
+  page's scale.
+
+**A real readability tradeoff, found and knowingly kept, not hidden:**
+upazila name labels were set to white for visibility against the darker
+priority-score classes (Shalla, Baniachong). Without a dark text buffer/
+halo, this makes the label nearly unreadable against the two lightest
+classes (Jagannathpur's "0 - 0", Itna's "0 - 8.8") — a buffer was
+offered and explicitly declined in favor of keeping plain white text
+everywhere for visual consistency. Documented here rather than silently
+fixed or silently ignored.
+
+Project file: `Phase_Q5_situation_map_atlas.qgz` — a fresh, minimal
+5-layer QGIS project (built for this phase only) rather than continuing
+to add onto `Phase_Q1_sunamganj_flood_accessibility.qgz`, which had
+accumulated dozens of temporary result layers across Q2-Q4's GUI
+sessions and was no longer a clean base for cartographic work.
+
 ## Regenerating
 
 ```
