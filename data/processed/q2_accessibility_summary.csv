@@ -1,0 +1,7 @@
+metric,value
+full_network_reachable_m,537407
+degraded_network_reachable_m,438985
+reachable_length_lost_m,98422
+reachable_length_lost_pct,18.3
+lost_access_road_segments,2447
+population_near_lost_access_roads_estimate,87902
