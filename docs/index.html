@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sunamganj Flood Response Priority Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; font-family: -apple-system, Helvetica, Arial, sans-serif; }
+  #map { position: absolute; top: 56px; bottom: 0; left: 0; right: 0; }
+  header {
+    height: 56px; background: #1b1f27; color: #fff; display: flex; align-items: center;
+    padding: 0 16px; box-sizing: border-box; gap: 12px;
+  }
+  header h1 { font-size: 16px; margin: 0; font-weight: 600; }
+  header p { margin: 0; font-size: 12px; color: #b8bfcc; }
+  .legend {
+    background: #fff; padding: 10px 12px; border-radius: 6px; box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    font-size: 12px; line-height: 1.5;
+  }
+  .legend h4 { margin: 0 0 6px 0; font-size: 12px; }
+  .legend .row { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+  .legend .swatch { width: 14px; height: 14px; display: inline-block; border: 1px solid rgba(0,0,0,0.2); }
+  .leaflet-popup-content h3 { margin: 0 0 6px 0; font-size: 14px; }
+  .leaflet-popup-content table { border-collapse: collapse; font-size: 12px; }
+  .leaflet-popup-content td { padding: 2px 6px 2px 0; }
+  .leaflet-popup-content td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .score-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: 600; font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Sunamganj Flood Response &mdash; Priority Situation Map</h1>
+    <p>Multi-criteria priority ranking (access loss, flood exposure, population density) &middot; real Sentinel-1 / OSM / WorldPop / HDX data</p>
+  </div>
+</header>
+
+<div id="map"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+const PRIORITY_BREAKS = [0, 8.8, 35.9, 64.9, 79.6];
+const PRIORITY_COLORS = ['#fff5f0', '#fcbba1', '#fb6a4a', '#de2d26', '#a50f15'];
+
+function colorForScore(score) {
+  if (score <= PRIORITY_BREAKS[0]) return PRIORITY_COLORS[0];
+  if (score <= PRIORITY_BREAKS[1]) return PRIORITY_COLORS[1];
+  if (score <= PRIORITY_BREAKS[2]) return PRIORITY_COLORS[2];
+  if (score <= PRIORITY_BREAKS[3]) return PRIORITY_COLORS[3];
+  return PRIORITY_COLORS[4];
+}
+
+const map = L.map('map', { zoomControl: true }).setView([24.65, 91.32], 10);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  maxZoom: 18,
+}).addTo(map);
+
+L.control.scale({ metric: true, imperial: false }).addTo(map);
+
+function fmt(n) {
+  return Math.round(n).toLocaleString();
+}
+
+function popupHtml(p) {
+  return `
+    <h3>${p.adm3_name} Upazila</h3>
+    <div class="score-badge" style="background:${colorForScore(p.priority_score)}; color:${p.priority_score > 35.9 ? '#fff' : '#333'}">
+      Priority score: ${p.priority_score.toFixed(1)} / 100
+    </div>
+    <table style="margin-top:8px">
+      <tr><td>Total population</td><td class="num">${fmt(p.population_total)}</td></tr>
+      <tr><td>Flood-exposed population</td><td class="num">${fmt(p.population_flood_exposed)}</td></tr>
+      <tr><td>Population losing road access</td><td class="num">${fmt(p.population_access_loss)}</td></tr>
+      <tr><td>Population density (per km&sup2;)</td><td class="num">${fmt(p.population_density)}</td></tr>
+      <tr><td>Area (km&sup2;)</td><td class="num">${p.area_sqkm.toFixed(0)}</td></tr>
+    </table>
+  `;
+}
+
+const layers = {};
+const layerControl = L.control.layers({}, {}, { collapsed: false }).addTo(map);
+
+fetch('data/priority_ranking.geojson')
+  .then(r => r.json())
+  .then(data => {
+    layers.priority = L.geoJSON(data, {
+      style: f => ({
+        fillColor: colorForScore(f.properties.priority_score),
+        weight: 1,
+        color: '#555',
+        fillOpacity: 0.85,
+      }),
+      onEachFeature: (f, layer) => {
+        layer.bindPopup(popupHtml(f.properties));
+        layer.on('mouseover', () => layer.setStyle({ weight: 3, color: '#111' }));
+        layer.on('mouseout', () => layer.setStyle({ weight: 1, color: '#555' }));
+      },
+    }).addTo(map);
+    layerControl.addOverlay(layers.priority, 'Priority score (choropleth)');
+  });
+
+fetch('data/flood_extent.geojson')
+  .then(r => r.json())
+  .then(data => {
+    layers.flood = L.geoJSON(data, {
+      style: { fillColor: '#2b6cb0', color: '#1a4971', weight: 1, fillOpacity: 0.45 },
+    }).addTo(map);
+    layerControl.addOverlay(layers.flood, 'Flood extent (Sentinel-1, real event)');
+  });
+
+fetch('data/roads_degraded.geojson')
+  .then(r => r.json())
+  .then(data => {
+    layers.roads = L.geoJSON(data, {
+      style: { color: '#333', weight: 1 },
+    });
+    layerControl.addOverlay(layers.roads, 'Roads still usable after flooding');
+  });
+
+fetch('data/health_facilities.geojson')
+  .then(r => r.json())
+  .then(data => {
+    layers.facilities = L.geoJSON(data, {
+      pointToLayer: (f, latlng) => L.circleMarker(latlng, {
+        radius: 6, fillColor: '#facc15', color: '#333', weight: 1, fillOpacity: 1,
+      }),
+      onEachFeature: (f, layer) => {
+        const name = f.properties.name || 'Unnamed facility';
+        const amenity = f.properties.amenity || '';
+        layer.bindPopup(`<strong>${name}</strong><br>${amenity}`);
+      },
+    }).addTo(map);
+    layerControl.addOverlay(layers.facilities, 'Health facilities');
+  });
+
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = function () {
+  const div = L.DomUtil.create('div', 'legend');
+  const labels = ['0', '0 &ndash; 8.8', '8.8 &ndash; 35.9', '35.9 &ndash; 64.9', '64.9 &ndash; 79.6'];
+  div.innerHTML = '<h4>Priority score</h4>' + labels.map((label, i) =>
+    `<div class="row"><span class="swatch" style="background:${PRIORITY_COLORS[i]}"></span>${label}</div>`
+  ).join('');
+  return div;
+};
+legend.addTo(map);
+</script>
+
+</body>
+</html>

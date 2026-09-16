@@ -98,3 +98,16 @@ one command.
   people losing access, Shalla's priority_score of 79.59, an 8-page atlas
   PDF. Two real automation-only bugs found and fixed in the process, not
   hit during the manual sessions — see `data/README.md`.
+
+## Phase Q7 — Interactive web dashboard (added after Q0-Q6 completion)
+A static Leaflet.js dashboard publishing the real Q4/Q5 outputs (priority
+choropleth, flood extent, degraded road network, health facilities) as
+an interactive map, hosted free on GitHub Pages with no backend.
+- **Done when:** a live, public URL renders the real priority ranking as
+  an interactive choropleth with working popups, layer toggles, and a
+  legend. ✅ Done (tag `phase-q7`) — `docs/index.html` (Leaflet, OSM
+  basemap), data exported and simplified for the web by
+  `scripts/export_dashboard_data.py`. This is a deliberately different
+  skillset from Q0-Q6 (web/JS mapping, not QGIS desktop) — kept as its
+  own addition on top of an already-complete project rather than folded
+  into the QGIS roadmap itself.

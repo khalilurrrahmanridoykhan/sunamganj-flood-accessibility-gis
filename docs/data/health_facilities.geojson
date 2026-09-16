@@ -1,0 +1,20 @@
+{
+"type": "FeatureCollection",
+"name": "health_facilities",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "Ajmiriganj Upazila Health Complex", "amenity": "hospital" }, "geometry": { "type": "Point", "coordinates": [ 91.2355889, 24.5515794 ] } },
+{ "type": "Feature", "properties": { "name": "বানিয়াচং ঊপজেলা স্বাস্থ্য কমপ্লেক্স", "amenity": "hospital" }, "geometry": { "type": "Point", "coordinates": [ 91.363971, 24.5043956 ] } },
+{ "type": "Feature", "properties": { "name": "Loularchar Commuinity Clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.259973, 24.7425587 ] } },
+{ "type": "Feature", "properties": { "name": "Shamarchar commuinity Clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.2452853, 24.7494645 ] } },
+{ "type": "Feature", "properties": { "name": "Kartikpur Commuinity Clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.2589565, 24.7459227 ] } },
+{ "type": "Feature", "properties": { "name": "Vojendroganj up health and family welfare centre", "amenity": "hospital" }, "geometry": { "type": "Point", "coordinates": [ 91.2311956, 24.7475304 ] } },
+{ "type": "Feature", "properties": { "name": "Uzanyarabad community clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.167013, 24.7373919 ] } },
+{ "type": "Feature", "properties": { "name": "Kashipur Community Clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.2118392, 24.722412 ] } },
+{ "type": "Feature", "properties": { "name": "Atgao community clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.1865637, 24.751351 ] } },
+{ "type": "Feature", "properties": { "name": "Union health and family welfare center", "amenity": "hospital" }, "geometry": { "type": "Point", "coordinates": [ 91.159777800000015, 24.7655022 ] } },
+{ "type": "Feature", "properties": { "name": "Srihile community clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.2113258, 24.5887635 ] } },
+{ "type": "Feature", "properties": { "name": "Adittopur community clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.1978826, 24.6310885 ] } },
+{ "type": "Feature", "properties": { "name": "Achanpur community clinic", "amenity": "clinic" }, "geometry": { "type": "Point", "coordinates": [ 91.3315987, 24.7125292 ] } }
+]
+}

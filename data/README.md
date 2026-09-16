@@ -256,6 +256,23 @@ Run: `python3 scripts/run_pipeline.py` (requires QGIS 4.x installed
 locally; the script locates `qgis_process` under `/Applications` on
 macOS by default).
 
+## Phase Q7 — interactive web dashboard
+
+`docs/index.html` — a static Leaflet.js dashboard (OSM basemap) publishing
+the real Q4/Q5 outputs: the priority-score choropleth (same 5-class
+break points as the Q5 atlas), flood extent, the flood-degraded road
+network, and health facilities, with popups showing each upazila's real
+numbers and a toggleable layer control. Hosted free on GitHub Pages,
+no backend.
+
+Data for it comes from `scripts/export_dashboard_data.py`, which
+simplifies geometry (in the metric UTM 46N CRS, then reprojects to
+WGS84 for Leaflet/GeoJSON) to keep the page's payload small. Hit the
+same `GeometryCollection`-typed flood extent issue Phase Q6 found
+(a valid geometry, but typed as a collection containing a stray
+zero-area `LineString` alongside the real `MultiPolygon`) -- reused the
+same `clean_polygonal()` fix.
+
 ## Regenerating
 
 ```
