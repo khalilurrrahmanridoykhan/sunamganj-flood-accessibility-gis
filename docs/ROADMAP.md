@@ -74,6 +74,13 @@ QGIS Print Layout + Atlas: one professional situation map per union,
 auto-generated, legend/scale/north-arrow/priority-score included, exported
 as a PDF atlas.
 - **Done when:** a complete PDF atlas covering every union in the AOI.
+  ✅ Done (tag `phase-q5`) — real QGIS Print Layout + Atlas work, driven
+  by `upazila_priority_ranking` as the coverage layer: graduated priority
+  choropleth, dynamic per-page title (`[% "adm3_name" %]`), legend, scale
+  bar, north arrow, exported as an 8-page PDF (one page per upazila,
+  auto-zoomed to each feature + 15% margin). See `data/README.md` for a
+  real label-readability tradeoff found and knowingly accepted, not
+  hidden.
 
 ## Phase Q6 — PyQGIS automation (stretch)
 Script the Q1–Q5 pipeline so re-running it against a newer flood event is
