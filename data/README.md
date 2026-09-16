@@ -136,6 +136,39 @@ the highest flood-exposed *and* access-loss populations despite similar
 totals to Derai and Ajmiriganj — worth a real GIS interpretation in Q4's
 prioritization, not just a number to report.
 
+## Phase Q4 outputs — multi-criteria weighted priority ranking
+
+`upazila_priority_inputs.gpkg` (Q3's three population layers + real HDX
+`area_sqkm`, merged) → real QGIS Field Calculator work: population
+density, three min-max normalized criteria (0-100 each), and a final
+weighted score. Exported as `upazila_priority_ranking.gpkg`.
+
+**The weighting scheme — justified, not asserted:**
+
+| Criterion | Weight | Why |
+|---|---|---|
+| Access-loss population | **45%** | Highest weight — whether responders can physically *reach* people at all is the binding operational constraint, and the reason this project used network analysis instead of straight-line buffers in the first place. |
+| Flood-exposed population | **30%** | Direct measure of people in immediate danger (evacuation/shelter need). |
+| Population density | **25%** | Lowest weight — a logistics/efficiency factor (denser areas mean response reaches more people per trip), not a primary urgency driver. |
+
+**Real ranked result:**
+
+| Rank | Upazila | Priority score | Why it ranks here |
+|---|---|---|---|
+| 1 | **Shalla** | 79.6 | Near-max access-loss (99.3/100) and high density (65.6/100) outweigh only moderate flood exposure |
+| 2 | Ajmiriganj | 64.9 | Max flood exposure (100/100) and max density (100/100), but *low* access-loss (22.0/100) pulls it below Shalla |
+| 3 | Baniachong | 61.3 | Max access-loss (100/100, tied with Shalla for worst) but low flood exposure and density hold it back |
+| 4 | Derai | 35.9 | Moderate on all three |
+| 5-8 | Khaliajuri, Itna, Nabiganj, Jagannathpur | 15.0 → 0.0 | Low on all three criteria |
+
+**The real finding this scoring surfaces:** Ajmiriganj has the highest raw
+flood exposure of any upazila, and would rank #1 under a flood-only
+metric — but it ranks **#2** here, behind Shalla, because Ajmiriganj's
+road network held up relatively well (only 22% of the access-loss scale)
+while Shalla's did not (99%). A response plan built on flood extent alone
+would misprioritize Ajmiriganj over Shalla; this is exactly the failure
+mode network-based accessibility analysis exists to catch.
+
 ## Regenerating
 
 ```

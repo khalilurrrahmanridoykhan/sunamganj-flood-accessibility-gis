@@ -61,7 +61,13 @@ admin3/upazila for Bangladesh, not admin4/union -- see Q0's note).
 Combine flood exposure, accessibility loss, and population density into a
 single normalized 0–100 response-priority score per union.
 - **Done when:** a ranked priority list with the weighting scheme
-  documented and justified, not just asserted.
+  documented and justified, not just asserted. ✅ Done (tag `phase-q4`)
+  — real QGIS Field Calculator work (density + 3 normalized criteria +
+  weighted score), weights justified (access-loss 45% > flood 30% >
+  density 25%, reasoning in `data/README.md`). Real finding: Ajmiriganj
+  has the highest raw flood exposure but ranks #2, behind Shalla, because
+  its road network held up — exactly what a flood-only metric would have
+  missed.
 
 ## Phase Q5 — Cartographic production
 QGIS Print Layout + Atlas: one professional situation map per union,
