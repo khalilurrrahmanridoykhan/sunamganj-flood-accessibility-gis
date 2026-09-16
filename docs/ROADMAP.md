@@ -47,9 +47,15 @@ once on the intact network, once with flood-affected segments removed.
 
 ## Phase Q3 — Raster/hazard integration
 Zonal statistics joining the real WorldPop raster to the flood extent and
-the accessibility-loss layer, per union.
+the accessibility-loss layer, per upazila (HDX's COD-AB only goes to
+admin3/upazila for Bangladesh, not admin4/union -- see Q0's note).
 - **Done when:** a per-union table of population count, flood-exposed
   population, and access-loss population, all from real zonal stats.
+  ✅ Done (tag `phase-q3`) — real per-upazila table (8 upazilas), sanity-
+  checked (flood-exposed/access-loss population never exceeds total,
+  verified not assumed), and cross-validated against Q2's independent
+  estimate: 87,902 vs. ~87,900, two different methods landing within 2
+  people of each other. See `data/README.md` for the full table.
 
 ## Phase Q4 — Multi-criteria weighted overlay
 Combine flood exposure, accessibility loss, and population density into a
