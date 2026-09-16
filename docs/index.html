@@ -31,8 +31,11 @@
   header .brand { display: flex; flex-direction: column; }
   header h1 { font-size: 15px; margin: 0; font-weight: 600; letter-spacing: 0.2px; }
   header p { margin: 0; font-size: 11.5px; color: #9ca3af; }
-  header .repo-link { margin-left: auto; font-size: 12px; color: #d1d5db; text-decoration: none; border: 1px solid #374151; padding: 6px 12px; border-radius: 6px; }
+  header .header-actions { margin-left: auto; display: flex; gap: 8px; }
+  header .repo-link { font-size: 12px; color: #d1d5db; text-decoration: none; border: 1px solid #374151; padding: 6px 12px; border-radius: 6px; }
   header .repo-link:hover { background: #1f2937; }
+  header .repo-link.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  header .repo-link.primary:hover { background: #991b1b; }
 
   .body-row { flex: 1 1 auto; display: flex; min-height: 0; }
 
@@ -42,9 +45,18 @@
   }
   #map { flex: 1 1 auto; min-height: 0; }
 
-  .sidebar-section { padding: 16px 18px; border-bottom: 1px solid var(--sidebar-border); }
+  .sidebar-section { padding: 12px 18px; border-bottom: 1px solid var(--sidebar-border); }
   .sidebar-section.grow { flex: 1 1 auto; overflow-y: auto; min-height: 0; padding: 8px 0; }
-  .sidebar-section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-soft); margin: 0 0 10px 0; font-weight: 700; }
+  .sidebar-section h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-soft); margin: 0;
+    font-weight: 700; display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+  }
+  .sidebar-section.collapsible h2 { margin-bottom: 0; }
+  .sidebar-section.collapsible:not(.open) h2 { margin-bottom: 0; }
+  .sidebar-section h2 .chevron { transition: transform 0.15s; color: var(--ink-soft); font-size: 10px; }
+  .sidebar-section.collapsible.open h2 .chevron { transform: rotate(90deg); }
+  .collapsible-content { overflow: hidden; max-height: 0; transition: max-height 0.2s ease; }
+  .sidebar-section.collapsible.open .collapsible-content { max-height: 400px; margin-top: 10px; }
 
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .stat-card { background: var(--panel-bg); border-radius: 8px; padding: 10px 12px; }
@@ -93,9 +105,6 @@
   .upazila-item .mini-stats b { color: var(--ink); font-weight: 600; }
   .no-results { padding: 24px 18px; color: var(--ink-soft); font-size: 13px; text-align: center; }
 
-  footer.sidebar-footer { padding: 10px 18px; font-size: 10.5px; color: var(--ink-soft); border-top: 1px solid var(--sidebar-border); }
-  footer.sidebar-footer a { color: var(--ink-soft); }
-
   .leaflet-popup-content h3 { margin: 0 0 6px 0; font-size: 14px; }
   .leaflet-popup-content table { border-collapse: collapse; font-size: 12px; }
   .leaflet-popup-content td { padding: 2px 6px 2px 0; }
@@ -135,7 +144,10 @@
       <h1>Sunamganj Flood Response &mdash; Priority Dashboard</h1>
       <p>Real Sentinel-1 / OpenStreetMap / WorldPop / HDX data &middot; multi-criteria priority ranking</p>
     </div>
-    <a class="repo-link" href="https://github.com/khalilurrrahmanridoykhan/sunamganj-flood-accessibility-gis" target="_blank" rel="noopener">View on GitHub &nearr;</a>
+    <div class="header-actions">
+      <a class="repo-link" href="https://github.com/khalilurrrahmanridoykhan" target="_blank" rel="noopener">View my profile</a>
+      <a class="repo-link primary" href="https://github.com/khalilurrrahmanridoykhan/sunamganj-flood-accessibility-gis" target="_blank" rel="noopener">View on GitHub &nearr;</a>
+    </div>
   </header>
 
   <button id="sidebar-toggle">&#9776; Upazilas</button>
@@ -147,40 +159,39 @@
         <div class="stat-grid" id="stat-grid"><!-- filled by JS --></div>
       </div>
 
-      <div class="sidebar-section">
-        <h2>Filter</h2>
-        <input id="search-input" type="text" placeholder="Search upazila by name..." />
-        <div class="tier-chips" id="tier-chips"><!-- filled by JS --></div>
+      <div class="sidebar-section collapsible" id="section-filter">
+        <h2>Filter <span class="chevron">&#9656;</span></h2>
+        <div class="collapsible-content">
+          <input id="search-input" type="text" placeholder="Search upazila by name..." />
+          <div class="tier-chips" id="tier-chips"><!-- filled by JS --></div>
+        </div>
       </div>
 
-      <div class="sidebar-section">
-        <h2>Map layers</h2>
-        <div class="layer-toggle-row">
-          <span>Priority choropleth</span>
-          <label class="switch"><input type="checkbox" id="toggle-priority" checked><span class="slider"></span></label>
-        </div>
-        <div class="layer-toggle-row">
-          <span>Flood extent</span>
-          <label class="switch"><input type="checkbox" id="toggle-flood" checked><span class="slider"></span></label>
-        </div>
-        <div class="layer-toggle-row">
-          <span>Roads still usable</span>
-          <label class="switch"><input type="checkbox" id="toggle-roads"><span class="slider"></span></label>
-        </div>
-        <div class="layer-toggle-row">
-          <span>Health facilities</span>
-          <label class="switch"><input type="checkbox" id="toggle-facilities" checked><span class="slider"></span></label>
+      <div class="sidebar-section collapsible" id="section-layers">
+        <h2>Map layers <span class="chevron">&#9656;</span></h2>
+        <div class="collapsible-content">
+          <div class="layer-toggle-row">
+            <span>Priority choropleth</span>
+            <label class="switch"><input type="checkbox" id="toggle-priority" checked><span class="slider"></span></label>
+          </div>
+          <div class="layer-toggle-row">
+            <span>Flood extent</span>
+            <label class="switch"><input type="checkbox" id="toggle-flood" checked><span class="slider"></span></label>
+          </div>
+          <div class="layer-toggle-row">
+            <span>Roads still usable</span>
+            <label class="switch"><input type="checkbox" id="toggle-roads"><span class="slider"></span></label>
+          </div>
+          <div class="layer-toggle-row">
+            <span>Health facilities</span>
+            <label class="switch"><input type="checkbox" id="toggle-facilities" checked><span class="slider"></span></label>
+          </div>
         </div>
       </div>
 
       <div class="sidebar-section grow">
         <div id="upazila-list"><!-- filled by JS --></div>
       </div>
-
-      <footer class="sidebar-footer">
-        Flood extent: Sentinel-1 change detection. Roads &amp; facilities: OpenStreetMap. Population: WorldPop 2020.
-        Boundaries: HDX COD-AB. Built with QGIS + Leaflet.
-      </footer>
     </aside>
 
     <div id="map"></div>
@@ -207,10 +218,26 @@ function tierForScore(score) {
 
 const map = L.map('map', { zoomControl: true }).setView([24.65, 91.32], 10);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-  maxZoom: 19,
-}).addTo(map);
+// No-API-key basemaps (Esri's public ArcGIS Online tile services) --
+// the CARTO tiles used before this now require a key and rendered as
+// "API KEY REQUIRED" watermarks. "Streets" carries labels, roads and
+// building footprints at higher zoom; "Light" is a clean minimal base
+// that keeps the priority choropleth as the dominant signal;
+// "Satellite" is real imagery for ground-truthing the flood extent.
+const esriAttribution = 'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, FAO, NOAA, USGS';
+const baseLayers = {
+  'Streets': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: esriAttribution, maxZoom: 19,
+  }),
+  'Light': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: esriAttribution, maxZoom: 16,
+  }),
+  'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: esriAttribution, maxZoom: 19,
+  }),
+};
+baseLayers['Streets'].addTo(map);
+L.control.layers(baseLayers, {}, { position: 'topright', collapsed: false }).addTo(map);
 
 L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
 
@@ -435,6 +462,10 @@ document.getElementById('toggle-facilities').addEventListener('change', e => {
 
 document.getElementById('sidebar-toggle').addEventListener('click', () => {
   document.getElementById('sidebar').classList.toggle('open');
+});
+
+document.querySelectorAll('.sidebar-section.collapsible > h2').forEach(h2 => {
+  h2.addEventListener('click', () => h2.closest('.sidebar-section').classList.toggle('open'));
 });
 </script>
 
