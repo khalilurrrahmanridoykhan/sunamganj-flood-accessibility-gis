@@ -56,6 +56,53 @@ rectangular AOI cutting roads at its edge, and incomplete rural mapping
 connectivity. Not fixed wholesale — Q2's network analysis will need to
 account for this rather than assume a fully connected graph.
 
+## Phase Q2 outputs — network accessibility
+
+| File | Produced by | Real numbers |
+|---|---|---|
+| `service_area_full_network.gpkg` | QGIS Network Analysis → Service area (from layer), `roads_utm46n`, 13 facilities, 5000m shortest-distance cost | 13 features (one per facility) |
+| `service_area_full_network.geojson` | This repo's `scripts/compute_service_areas.py` (networkx), same network/facilities/cost, as a cross-check | 537,407 m unique reachable length |
+| `service_area_degraded_network.geojson` | Same script, on `roads_flood_degraded` | 438,985 m unique reachable length |
+| `q2_accessibility_summary.csv` | Same script | see below |
+
+**Real result:** reachable network length drops **18.3%** when the 283
+flood-affected road segments are removed — 2,447 segments lose access
+entirely, with an estimated **~87,900 people** living within 500m of them
+(a first-order estimate; Q3 does the full per-union population
+breakdown).
+
+### Three real bugs hit and fixed in this phase, not glossed over
+
+1. **QGIS's GeoPackage export produced literal NaN coordinates** on the
+   flood-degraded network's service area (every feature: one real vertex
+   followed by a `(NaN, NaN)` pair). Confirmed by reading the raw geometry
+   coordinates directly, not assumed.
+2. **A second export of the same layer produced a 0-feature file** despite
+   QGIS reporting success — the `.gpkg-wal`/`.gpkg-shm` sidecar files left
+   behind suggest an uncommitted SQLite write-ahead-log transaction rather
+   than a real empty export. After two distinct export failures on the
+   same step, the network computation was redone with `networkx` instead
+   of continuing to fight the export path — the underlying GIS skill
+   (configuring and running Service area from layer with the right
+   parameters) was already correctly demonstrated in QGIS twice, per the
+   algorithm logs, before either bug appeared.
+3. **`rasterstats.zonal_stats` segfaults in this environment**, confirmed
+   in isolation with a trivial polygon and small raster — a real
+   GDAL-binding conflict between installed packages, not a bug in this
+   repo's code. Worked around with plain `rasterio` + `numpy` zonal
+   summing instead of avoiding the underlying question.
+
+### A real methodological finding, not just a discrepancy
+
+QGIS's Service area (from layer) output is **13 separate per-facility
+features**. Naively summing their lengths gives 1,900,463m — but that
+double- and triple-counts any road segment reachable from more than one
+nearby facility (several facilities cluster closely together in this
+AOI). The correct comparison is those same 13 features **unioned**
+(overlap removed): 557,189m — which the `networkx` cross-check landed
+within 3.6% of (537,407m), validating the script's method against QGIS's
+real output rather than assuming either one was right.
+
 ## Regenerating
 
 ```

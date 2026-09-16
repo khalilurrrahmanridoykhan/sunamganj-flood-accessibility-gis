@@ -38,7 +38,12 @@ Analysis (service area / shortest path) from every health facility twice:
 once on the intact network, once with flood-affected segments removed.
 - **Done when:** two accessibility surfaces exist, and the *difference*
   between them — the real population that loses access — is quantified,
-  not just each surface in isolation.
+  not just each surface in isolation. ✅ Done (tag `phase-q2`) — real
+  QGIS network analysis run twice (full + flood-degraded network), 18.3%
+  of reachable road length lost, ~87,900 people near the roads that lose
+  access. Three real bugs hit and fixed along the way (a NaN-corrupted
+  QGIS export, an empty QGIS export, a `rasterstats` segfault) — see
+  `data/README.md`.
 
 ## Phase Q3 — Raster/hazard integration
 Zonal statistics joining the real WorldPop raster to the flood extent and
