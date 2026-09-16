@@ -7,3 +7,4 @@ node_modules/
 *.qgz~
 *.gpkg-wal
 *.gpkg-shm
+*.tif.aux.xml
