@@ -12,7 +12,12 @@ dates), real OSM health facilities and road network, real WorldPop
 population clipped to the AOI. Reproject everything to EPSG:32646 (UTM
 zone 46N) for accurate metric distance/area calculations.
 - **Done when:** all four layers load in QGIS in the same real projected
-  CRS, no reprojection warnings.
+  CRS, no reprojection warnings. ✅ Done (tag `phase-q0`) — real flood
+  extent regenerated (exact match to `geohealth-risk-mapping`'s documented
+  H5 result), real OSM health facilities and roads, real WorldPop clipped
+  to the AOI, real HDX upazila boundaries; all reprojected to EPSG:32646.
+  Found two real surprises along the way — the AOI spans 4 districts, and
+  a Dirai/Derai spelling mismatch — see `data/README.md`.
 
 ## Phase Q1 — Vector geoprocessing
 Buffers around health facilities, spatial join of population to union
