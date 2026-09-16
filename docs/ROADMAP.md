@@ -24,7 +24,13 @@ Buffers around health facilities, spatial join of population to union
 boundaries, dissolve/clip on the flood extent, topology cleanup on the
 road network (a routable network can't have dangling/disconnected edges).
 - **Done when:** a clean, validated vector dataset ready for network
-  analysis.
+  analysis. ✅ Done (tag `phase-q1`) — real QGIS GUI work: 2km facility
+  buffers, facilities joined to their upazila (13/13 matched), 283
+  flood-affected road segments extracted (8.3%, consistent with Q0's 8.0%
+  flooded-area figure), and a real topology check (5,023 dangling
+  endpoints found and documented, not silently fixed). See
+  `data/README.md` for full detail, including a real CRS-export bug
+  caught and fixed along the way.
 
 ## Phase Q2 — Network accessibility analysis
 Build a routable graph from the OSM road network. Run QGIS's Network
