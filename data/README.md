@@ -203,6 +203,59 @@ to add onto `Phase_Q1_sunamganj_flood_accessibility.qgz`, which had
 accumulated dozens of temporary result layers across Q2-Q4's GUI
 sessions and was no longer a clean base for cartographic work.
 
+## Phase Q6 — scripting the whole Q1-Q5 pipeline
+
+`scripts/run_pipeline.py` reproduces every real number in this document
+from Q0's raw inputs alone, unattended, using `qgis_process` (QGIS's own
+headless processing CLI) for the steps that stay genuinely QGIS
+algorithms (buffer, join by location, dissolve, extract by location,
+intersection, zonal statistics, atlas-to-PDF export), plus this repo's
+already-verified Python fallbacks for the two steps that already had a
+documented reason to not use QGIS's own output directly: Q2's networkx
+service area (cross-validated against QGIS's own result back in Q2, not
+a shortcut) and Q4's field-calculator formulas re-implemented in pandas.
+
+**Verified by actually stripping the repo down, not just re-running
+it.** A full scratch copy of the repo was made with every Q1-Q5 derived
+file deleted, keeping only Q0's true raw inputs (the flood extent,
+health facilities, roads, boundaries, WorldPop raster). Running the
+script against that stripped copy regenerated: 283 of 3,398 flooded
+road segments, 18.3% reachable-network loss, 87,902 people losing
+access, the exact same per-upazila population sums to the decimal, a
+priority ranking matching to 4-5 decimal places (Shalla 79.590487 vs.
+the original session's 79.590488), and an 8-page atlas PDF nearly
+byte-identical to the one built by hand in Phase Q5.
+
+**Two real bugs found while building this, neither hit during the
+manual sessions -- automation surfaces different failure modes than a
+GUI does:**
+
+1. `geopandas`' `.make_valid()` on the flood extent can return a
+   geometry that is *valid* but typed as a `GeometryCollection` (a real
+   `MultiPolygon` plus a zero-area `LineString` artifact). Once
+   reprojected to WGS84 for Q3, `native:intersection` against a
+   `GeometryCollection`-typed layer silently returns **zero features,
+   no error at all** -- the same real failure the original manual Q3
+   session hit as a visible "GeometryCollection vs MultiPolygon" QGIS
+   dialog error, just surfacing silently instead of loudly when
+   headless. Fixed by extracting only the polygonal parts before any
+   WGS84 intersection (`clean_polygonal()` in the script).
+2. `qgis_process run native:atlaslayouttopdf` can print `ERROR: No
+   atlas features found` and still **exit 0** -- a script that only
+   checks the exit code would report success on a completely failed
+   export. Root cause: this repo's own Q4 output file's *internal* OGR
+   layer name (`upazila_priority_inputs`, a naming quirk left over from
+   the original manual QGIS export) is what the Q5 project's atlas
+   coverage layer actually references -- rewriting that GeoPackage with
+   a different internal layer name (e.g. matching the filename instead)
+   silently breaks the atlas. Fixed by writing under the exact expected
+   layer name, and by having the pipeline script treat any `ERROR:` in
+   `qgis_process` output as a failure regardless of exit code.
+
+Run: `python3 scripts/run_pipeline.py` (requires QGIS 4.x installed
+locally; the script locates `qgis_process` under `/Applications` on
+macOS by default).
+
 ## Regenerating
 
 ```

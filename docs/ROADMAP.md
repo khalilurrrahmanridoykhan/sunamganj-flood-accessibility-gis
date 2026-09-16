@@ -86,4 +86,15 @@ as a PDF atlas.
 Script the Q1–Q5 pipeline so re-running it against a newer flood event is
 one command.
 - **Done when:** a single script reproduces Q1–Q5's outputs from Q0's raw
-  inputs, unattended.
+  inputs, unattended. ✅ Done (tag `phase-q6`) — `scripts/run_pipeline.py`,
+  built on `qgis_process` (QGIS's own headless processing CLI) for every
+  step that stays QGIS's own algorithm, plus this repo's already-verified
+  Python fallbacks (Q2's networkx service area) and the Q4 field-calc
+  formulas re-implemented in pandas. Verified genuinely, not just run
+  once: stripped a full scratch copy of the repo down to only Q0's true
+  raw inputs, ran the script unattended, and every real number it
+  regenerated matched what the original manual QGIS sessions documented
+  — 283/3398 flooded road segments, 18.3% reachable-network loss, 87,902
+  people losing access, Shalla's priority_score of 79.59, an 8-page atlas
+  PDF. Two real automation-only bugs found and fixed in the process, not
+  hit during the manual sessions — see `data/README.md`.
