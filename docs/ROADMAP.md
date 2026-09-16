@@ -110,4 +110,7 @@ an interactive map, hosted free on GitHub Pages with no backend.
   `scripts/export_dashboard_data.py`. This is a deliberately different
   skillset from Q0-Q6 (web/JS mapping, not QGIS desktop) — kept as its
   own addition on top of an already-complete project rather than folded
-  into the QGIS roadmap itself.
+  into the QGIS roadmap itself. Redesigned (tag `phase-q7-v2`) with a
+  sidebar: search-by-name, priority-tier filter chips, summary stat
+  cards, styled layer toggles, and a click-to-zoom upazila list, on a
+  CARTO Positron basemap.
